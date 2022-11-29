@@ -77,7 +77,7 @@ public class CourseController {
 
     @GetMapping(value = "/enrollStudent")
     public String enrollCurrentStudentToCourse(Long courseId){
-        Long studentId = 1L; //To Change
+        Long studentId = 1L; //Tooo Change
         courseService.assignStudentToCourse(courseId, studentId);
         return "redirect:/courses/index/student";
     }
