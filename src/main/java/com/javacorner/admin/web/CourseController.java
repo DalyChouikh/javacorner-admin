@@ -1,6 +1,7 @@
 package com.javacorner.admin.web;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import com.javacorner.admin.entity.Course;
 import com.javacorner.admin.entity.Instructor;
 import com.javacorner.admin.service.CourseService;
 import com.javacorner.admin.service.InstructorService;
+
 
 @Controller
 @RequestMapping(value = "/courses")
@@ -61,6 +63,23 @@ public class CourseController {
         model.addAttribute("listInstructors", instructors);
         model.addAttribute("course", new Course());
         return "course-views/formCreate";
+    }
+
+    @GetMapping(value = "/index/student")
+    public String courseForCurrentStudent(Model model){
+        Long studentId = 1L; //To Change
+        List<Course> subscribedCourses = courseService.fetchCoursesForStudent(studentId);
+        List<Course> otherCourses = courseService.fetchAll().stream().filter(course -> !subscribedCourses.contains(course)).collect(Collectors.toList());
+        model.addAttribute("listSubscribedCourses", subscribedCourses);
+        model.addAttribute("otherCourses", otherCourses);
+        return "course-views/student-courses";
+    }
+
+    @GetMapping(value = "/enrollStudent")
+    public String enrollCurrentStudentToCourse(Long courseId){
+        Long studentId = 1L; //To Change
+        courseService.assignStudentToCourse(courseId, studentId);
+        return "redirect:/courses/index/student";
     }
 
 }
