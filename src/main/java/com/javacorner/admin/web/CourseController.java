@@ -97,4 +97,20 @@ public class CourseController {
         return "redirect:/courses/index/student";
     }
 
+    @GetMapping(value = "/index/instructor")
+    public String coursesForCurrentInstructor(Model model){
+        Long instructorId = 1L; // Tooo Change
+        Instructor instructor = instructorService.loadInstructorById(instructorId);
+        model.addAttribute("listCourses", instructor.getCourses());
+        return "course-views/instructor-courses";
+    }
+
+    @GetMapping(value = "/instructor")
+    public String coursesForCurrentInstructor(Model model, Long instructorId){
+        Instructor instructor = instructorService.loadInstructorById(instructorId);
+        model.addAttribute("listCourses", instructor.getCourses());
+        return "course-views/instructor-courses";
+    }
+    
+
 }
