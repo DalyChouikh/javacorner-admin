@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.javacorner.admin.entity.Course;
 import com.javacorner.admin.entity.Instructor;
+import com.javacorner.admin.entity.Student;
 import com.javacorner.admin.service.CourseService;
 import com.javacorner.admin.service.InstructorService;
+import com.javacorner.admin.service.StudentService;
 
 
 @Controller
@@ -22,10 +24,12 @@ public class CourseController {
     
     private CourseService courseService;
     private InstructorService instructorService;
+    private StudentService studentService;
 
-    public CourseController(CourseService courseService, InstructorService instructorService) {
+    public CourseController(CourseService courseService, InstructorService instructorService, StudentService studentService) {
         this.courseService = courseService;
         this.instructorService = instructorService;
+        this.studentService = studentService;
     }
 
     @GetMapping(value = "/index")
@@ -79,6 +83,17 @@ public class CourseController {
     public String enrollCurrentStudentToCourse(Long courseId){
         Long studentId = 1L; //Tooo Change
         courseService.assignStudentToCourse(courseId, studentId);
+        return "redirect:/courses/index/student";
+    }
+
+    @GetMapping(value = "/unenrollStudent")
+    public String unenrollCurrentStudentFromCourse(Long courseId){
+        Long studentId = 1L; //Tooo Change
+        Course course = courseService.loadCourseById(courseId);
+        Student student = studentService.loadStudentById(studentId);
+        course.removeStudentFromCourse(student);
+        courseService.createOrUpdateCourse(course);
+        studentService.updateStudent(student);
         return "redirect:/courses/index/student";
     }
 

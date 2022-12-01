@@ -34,10 +34,10 @@
                             <td
                                 th:text="${course.getInstructor().getFirstName()} + ' ' + ${course.getInstructor().getLastName()}">
                             </td>
-                            <!-- <td>
-                                <a class="btn btn-danger" onclick="return confirm('This Course will be deleted permanently?')"
-                                th:href="@{/courses/delete(courseId=${course.getCourseId()}, keyword=${keyword})}">Delete</a>
-                            </td> -->
+                            <td>
+                                <a class="btn btn-danger" onclick="return confirm('Do you wish to continue to unenroll from this course?')"
+                                th:href="@{/courses/unenrollStudent(courseId=${course.getCourseId()})}">Unenroll</a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -67,10 +67,6 @@
                             <td
                                 th:text="${course.getInstructor().getFirstName()} + ' ' + ${course.getInstructor().getLastName()}">
                             </td>
-                            <!-- <td>
-                                <a class="btn btn-danger" onclick="return confirm('This Course will be deleted permanently?')"
-                                th:href="@{/courses/delete(courseId=${course.getCourseId()}, keyword=${keyword})}">Delete</a>
-                            </td> -->
                             <td>
                                 <a class="btn btn-info" th:href="@{/courses/enrollStudent(courseId=${course.getCourseId()})}">
                                     Enroll in
