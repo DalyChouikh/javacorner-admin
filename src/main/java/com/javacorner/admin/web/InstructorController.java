@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -37,6 +38,19 @@ public class InstructorController {
     public String deleteInstructor(Long instructorId, String keyword){
         instructorService.removeInstructor(instructorId);
         return "redirect:/instructors/index?keyword=" + keyword;
+    }
+
+    @GetMapping(value = "/formUpdate")
+    public String updateInstructor(Model model, Long instructorId){
+        Instructor instructor = instructorService.loadInstructorById(1L);
+        model.addAttribute("instructor", instructor);
+        return "instructor-views/formUpdate";
+    }
+
+    @PostMapping(value = "/update")
+    public String update(Instructor instructor){
+        instructorService.updateInstructor(instructor);
+        return "redirect:/instructors/index";
     }
 
 }
