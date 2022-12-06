@@ -33,4 +33,10 @@ public class InstructorController {
         return "instructor-views/instructors";
     }
 
+    @GetMapping(value = "/delete")
+    public String deleteInstructor(Long instructorId, String keyword){
+        instructorService.removeInstructor(instructorId);
+        return "redirect:/instructors/index?keyword=" + keyword;
+    }
+
 }
