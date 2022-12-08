@@ -5,24 +5,31 @@ import static com.javacorner.admin.constants.JavaCornerConstants.LIST_STUDENTS;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.javacorner.admin.entity.Student;
+import com.javacorner.admin.entity.User;
 import com.javacorner.admin.service.StudentService;
+import com.javacorner.admin.service.UserService;
 
 @Controller
 @RequestMapping(value = "/students")
 public class StudentController {
     
     private StudentService studentService;
+    private UserService userService;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, UserService userService) {
         this.studentService = studentService;
+        this.userService = userService;
     }
 
     @GetMapping(value = "/index")
@@ -49,6 +56,21 @@ public class StudentController {
     @PostMapping(value = "/update")
     public String update(Student student){
         studentService.updateStudent(student);
+        return "redirect:/students/index";
+    }
+
+    @GetMapping(value = "/formCreate")
+    public String formStudent(Model model){
+        model.addAttribute("student", new Student());
+        return "student-views/formCreate";
+    }
+
+    @PostMapping(value = "/save")
+    public String save(@Valid Student student, BindingResult bindingResult) {
+        User user = userService.loadUserByEmail(student.getUser().getEmail());
+        if(user != null) bindingResult.rejectValue("user.email", null, "There is already an account registered with that email ");
+        if(bindingResult.hasErrors()) return "student-views/formCreate";
+        studentService.createStudent(student.getFirstName(), student.getLastName(), student.getLevel(), student.getUser().getEmail(), student.getUser().getPassword());
         return "redirect:/students/index";
     }
 

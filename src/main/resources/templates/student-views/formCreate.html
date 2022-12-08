@@ -4,37 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Instructor</title>
+    <title>Create Student</title>
 </head>
 <body>
     <div layout:fragment="content1">
         <div class="col-md-6 offset-3 mt-3">
             <form class="form-control" method="post" th:action="@{save}">
                 <div class="mb-3 mt-3">
-                    <label for="firstName" class="form-label">Instructor First Name:</label>
+                    <label for="firstName" class="form-label">Student First Name:</label>
                     <input id="firstName" type="text" name="firstName" class="form-control"
-                        th:field="${instructor.firstName}" required>
+                        th:field="${student.firstName}" required>
                 </div>
                 <div class="mb-3 mt-3">
-                    <label for="lastName" class="form-label">Instructor Last Name:</label>
+                    <label for="lastName" class="form-label">Student Last Name:</label>
                     <input id="lastName" type="text" name="lastName" class="form-control"
-                        th:field="${instructor.lastName}" required>
+                        th:field="${student.lastName}" required>
                 </div>
                 <div class="mb-3 mt-3">
-                    <label for="summary" class="form-label">Instructor Summary:</label>
-                    <input id="summary" type="text" name="summary" class="form-control"
-                        th:field="${instructor.summary}" required>
+                    <label for="level" class="form-label">Student Level:</label>
+                    <input id="level" type="text" name="level" class="form-control"
+                        th:field="${student.level}" required>
                 </div>
                 <div class="mb-3 mt-3">
                     <label for="email" class="form-label">Email:</label>
                     <input id="email" type="text" name="email" class="form-control"
-                        th:field="${instructor.user.email}" required>
-                    <span style="color:red" th:errors="${instructor.user.email}"></span>
+                        th:field="${student.user.email}" required>
+                    <span style="color:red" th:errors="${student.user.email}"></span>
                 </div>
                 <div class="mb-3 mt-3">
                     <label for="password" class="form-label">Password:</label>
                     <input id="password" type="password" name="password" class="form-control"
-                        th:field="${instructor.user.password}" required>
+                        th:field="${student.user.password}" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Create</button>
             </form>
