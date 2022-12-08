@@ -36,9 +36,6 @@
                                     onclick="return confirm('This Student will be deleted permanently?')"
                                     th:href="@{/students/delete(studentId=${student.getStudentId()}, keyword=${keyword})}">Delete</a>
                             </td>
-                            <td>
-                                <a class="btn btn-primary" th:href="@{/students/formUpdate(studentId=${student.getStudentId()})}">Update</a>
-                            </td>
                         </tr>
                     </tbody>
             </div>
