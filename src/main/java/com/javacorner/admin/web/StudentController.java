@@ -1,12 +1,14 @@
 package com.javacorner.admin.web;
 
-import java.util.List;
+import static com.javacorner.admin.constants.JavaCornerConstants.KEYWORD;
+import static com.javacorner.admin.constants.JavaCornerConstants.LIST_STUDENTS;
 
-import static com.javacorner.admin.constants.JavaCornerConstants.*;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -37,5 +39,17 @@ public class StudentController {
         return "redirect:/students/index?keyword=" + keyword;
     }
 
+    @GetMapping(value = "/formUpdate")
+    public String updateStudent(Model model, Long studentId){
+        Student student = studentService.loadStudentById(studentId);
+        model.addAttribute("student", student);
+        return "student-views/formUpdate";
+    }
+
+    @PostMapping(value = "/update")
+    public String update(Student student){
+        studentService.updateStudent(student);
+        return "redirect:/students/index";
+    }
 
 }
