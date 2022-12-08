@@ -36,6 +36,9 @@
                                     onclick="return confirm('This Instructor will be deleted permanently?')"
                                     th:href="@{/instructors/delete(instructorId=${instructor.getInstructorId()}, keyword=${keyword})}">Delete</a>
                             </td>
+                            <td>
+                                <a class="btn btn-info" th:href="@{/courses/instructor(instructorId=${instructor.getInstructorId()})}">Courses</a>
+                            </td>
                         </tr>
                     </tbody>
             </div>

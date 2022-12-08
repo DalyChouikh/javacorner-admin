@@ -106,7 +106,7 @@ public class CourseController {
     }
 
     @GetMapping(value = "/instructor")
-    public String coursesForCurrentInstructor(Model model, Long instructorId){
+    public String coursesByInstructorId(Model model, Long instructorId){
         Instructor instructor = instructorService.loadInstructorById(instructorId);
         model.addAttribute("listCourses", instructor.getCourses());
         return "course-views/instructor-courses";
