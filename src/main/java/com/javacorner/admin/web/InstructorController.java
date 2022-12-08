@@ -2,6 +2,8 @@ package com.javacorner.admin.web;
 
 import java.util.List;
 
+import static com.javacorner.admin.constants.JavaCornerConstants.*;
+
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -34,10 +36,10 @@ public class InstructorController {
 
 
     @GetMapping(value= "/index")
-    public String instructors(Model model, @RequestParam(name = "keyword", defaultValue = "") String keyword) {
+    public String instructors(Model model, @RequestParam(name = KEYWORD, defaultValue = "") String keyword) {
         List<Instructor> instructors = instructorService.findInstructorByName(keyword);
-        model.addAttribute("listInstructors", instructors);
-        model.addAttribute("keyword", keyword);
+        model.addAttribute(LIST_INSTRUCTORS, instructors);
+        model.addAttribute(KEYWORD, keyword);
         return "instructor-views/instructors";
     }
 
