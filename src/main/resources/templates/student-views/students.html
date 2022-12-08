@@ -22,7 +22,7 @@
                             <th>Student Id</th>
                             <th>Student First Name</th>
                             <th>Student Last Name</th>
-                            <th>Student Summary</th>
+                            <th>Student Level</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,12 +31,12 @@
                             <td th:text = "${student.getFirstName()}"></td>
                             <td th:text = "${student.getLastName()}"></td>
                             <td th:text = "${student.getLevel()}"></td>
-                            <!-- <td>
-                                <a class="btn btn-danger"
-                                    onclick="return confirm('This Instructor will be deleted permanently?')"
-                                    th:href="@{/instructors/delete(instructorId=${instructor.getInstructorId()}, keyword=${keyword})}">Delete</a>
-                            </td>
                             <td>
+                                <a class="btn btn-danger"
+                                    onclick="return confirm('This Student will be deleted permanently?')"
+                                    th:href="@{/students/delete(studentId=${student.getStudentId()}, keyword=${keyword})}">Delete</a>
+                            </td>
+                            <!-- <td>
                                 <a class="btn btn-info" th:href="@{/courses/instructor(instructorId=${instructor.getInstructorId()})}">Courses</a>
                             </td> -->
                         </tr>

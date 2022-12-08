@@ -31,4 +31,11 @@ public class StudentController {
         return "student-views/students";
     }
 
+    @GetMapping(value = "/delete")
+    public String deleteStudent(Long studentId, String keyword){
+        studentService.removeStudent(studentId);
+        return "redirect:/students/index?keyword=" + keyword;
+    }
+
+
 }
