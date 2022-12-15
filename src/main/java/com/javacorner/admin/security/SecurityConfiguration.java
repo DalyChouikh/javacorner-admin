@@ -17,6 +17,7 @@ public class SecurityConfiguration {
         http.formLogin();
         http.authorizeRequests().antMatchers("/").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
+        http.exceptionHandling().accessDeniedPage("/403");
         return http.build();
     }
 
