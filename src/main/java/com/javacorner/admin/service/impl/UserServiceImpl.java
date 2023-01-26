@@ -1,5 +1,6 @@
 package com.javacorner.admin.service.impl;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +18,11 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     private RoleDao roleDao;
 
-    public UserServiceImpl(UserDao userDao, RoleDao roleDao) {
+    private PasswordEncoder passwordEncoder;
+    public UserServiceImpl(UserDao userDao, RoleDao roleDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
         this.roleDao = roleDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -29,7 +32,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(String email, String password) {
-        return userDao.save(new User(email, password));
+        User user = loadUserByEmail(email);
+        if( user != null) throw new RuntimeException("User with email " + email + " already exists");
+        String encodedPassword = passwordEncoder.encode(password);
+        return userDao.save(new User(email, encodedPassword));
     }
 
     @Override
