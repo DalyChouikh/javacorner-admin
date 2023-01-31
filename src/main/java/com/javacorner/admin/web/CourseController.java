@@ -71,13 +71,19 @@ public class CourseController {
     }
 
     @PostMapping(value = "/save")
+    @PreAuthorize("hasAnyAuthority('Admin', 'Instructor')")
     public String save(Course course){
         courseService.createOrUpdateCourse(course);
         return userService.doesCurrentUserHaveRole(INSTRUCTOR) ? "redirect:/courses/index/instructor" : "redirect:/courses/index";
     }
 
     @GetMapping(value = "/formCreate")
-    public String formCourses(Model model){
+    @PreAuthorize("hasAnyAuthority('Admin', 'Instructor')")
+    public String formCourses(Model model, Principal principal){
+        if(userService.doesCurrentUserHaveRole(INSTRUCTOR)){
+            Instructor instructor = instructorService.loadInstructorByEmail(principal.getName());
+            model.addAttribute(CURRENT_INSTRUCTOR, instructor);
+        }
         List<Instructor> instructors = instructorService.fetchInstructors();
         model.addAttribute(LIST_INSTRUCTORS, instructors);
         model.addAttribute("course", new Course());
@@ -113,6 +119,7 @@ public class CourseController {
     }
 
     @GetMapping(value = "/index/instructor")
+    @PreAuthorize("hasAuthority('Instructor')")
     public String coursesForCurrentInstructor(Model model, Principal principal){
         User user = userService.loadUserByEmail(principal.getName());
         Instructor instructor = instructorService.loadInstructorById(user.getInstructor().getInstructorId());
