@@ -6,6 +6,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.javacorner.admin.entity.User;
 import com.javacorner.admin.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -72,7 +73,7 @@ public class CourseController {
     @PostMapping(value = "/save")
     public String save(Course course){
         courseService.createOrUpdateCourse(course);
-        return "redirect:/courses/index";
+        return userService.doesCurrentUserHaveRole(INSTRUCTOR) ? "redirect:/courses/index/instructor" : "redirect:/courses/index";
     }
 
     @GetMapping(value = "/formCreate")
@@ -112,10 +113,12 @@ public class CourseController {
     }
 
     @GetMapping(value = "/index/instructor")
-    public String coursesForCurrentInstructor(Model model){
-        Long instructorId = 1L; // Tooo Change
-        Instructor instructor = instructorService.loadInstructorById(instructorId);
+    public String coursesForCurrentInstructor(Model model, Principal principal){
+        User user = userService.loadUserByEmail(principal.getName());
+        Instructor instructor = instructorService.loadInstructorById(user.getInstructor().getInstructorId());
         model.addAttribute(LIST_COURSES, instructor.getCourses());
+        model.addAttribute(FIRST_NAME, instructor.getFirstName());
+        model.addAttribute(LAST_NAME, instructor.getLastName());
         return "course-views/instructor-courses";
     }
 

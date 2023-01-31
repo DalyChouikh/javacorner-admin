@@ -7,5 +7,7 @@ public final class JavaCornerConstants {
     public static final String KEYWORD = "keyword";    
     public static final String INSTRUCTOR = "Instructor";
     public static final String CURRENT_INSTRUCTOR = "currentInstructor";
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
 
 }
