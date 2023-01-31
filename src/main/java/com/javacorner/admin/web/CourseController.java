@@ -2,9 +2,12 @@ package com.javacorner.admin.web;
 
 import static com.javacorner.admin.constants.JavaCornerConstants.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.javacorner.admin.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,17 +27,20 @@ import com.javacorner.admin.service.StudentService;
 @RequestMapping(value = "/courses")
 public class CourseController {
     
-    private CourseService courseService;
-    private InstructorService instructorService;
-    private StudentService studentService;
+    private final CourseService courseService;
+    private final InstructorService instructorService;
+    private final StudentService studentService;
+    private final UserService userService;
 
-    public CourseController(CourseService courseService, InstructorService instructorService, StudentService studentService) {
+    public CourseController(CourseService courseService, InstructorService instructorService, StudentService studentService, UserService userService) {
         this.courseService = courseService;
         this.instructorService = instructorService;
         this.studentService = studentService;
+        this.userService = userService;
     }
 
     @GetMapping(value = "/index")
+    @PreAuthorize("hasAuthority('Admin')")
     public String courses(Model model, @RequestParam(name = KEYWORD, defaultValue = "") String keyword){
         List<Course> courses = courseService.findCoursesByCourseName(keyword);
         model.addAttribute(LIST_COURSES, courses);
@@ -43,13 +49,19 @@ public class CourseController {
     }
 
     @GetMapping(value = "/delete")
+    @PreAuthorize("hasAuthority('Admin')")
     public String deleteCourse(Long courseId, String keyword){
         courseService.removeCourse(courseId);
         return "redirect:/courses/index?keyword=" + keyword;
     }
     
     @GetMapping(value = "/formUpdate")
-    public String updateCourse(Model model, Long courseId){
+    @PreAuthorize("hasAnyAuthority('Admin', 'Instructor')")
+    public String updateCourse(Model model, Long courseId, Principal principal){
+        if(userService.doesCurrentUserHaveRole(INSTRUCTOR)){
+            Instructor instructor = instructorService.loadInstructorByEmail(principal.getName());
+            model.addAttribute(CURRENT_INSTRUCTOR, instructor);
+        }
         Course course = courseService.loadCourseById(courseId);
         List<Instructor> instructors = instructorService.fetchInstructors();
         model.addAttribute("course", course);

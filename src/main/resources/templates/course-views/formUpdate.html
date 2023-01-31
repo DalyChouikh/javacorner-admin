@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="template">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="template">
 
 <head>
     <meta charset="UTF-8">
@@ -14,9 +15,11 @@
             <form class="form-control" method="post" th:action="@{save}" th:object="${course}">
                 <div class="mb-3 mt-3">
                     <label class="form-label">Course ID:</label>
-                    <input type="number" name="courseId" class="form-control" 
-                        th:value="${course.getCourseId()}"
-                        readonly="readonly">
+                    <label>
+                        <input type="number" name="courseId" class="form-control"
+                            th:value="${course.getCourseId()}"
+                            readonly="readonly">
+                    </label>
                 </div>
                 <div class="mb-3 mt-3">
                     <label for="courseName" class="form-label">Course Name:</label>
@@ -35,11 +38,20 @@
                 </div>
                 <div class="mb-3 mt-3">
                     <label class="form-label">Instructor:</label>
-                    <select th:field="${course.instructor}" name="instructor" class="form-select">
-                        <option th:each="instructor:${listInstructors}"
-                            th:text="${instructor.getFirstName()} + ' ' + ${instructor.getLastName()}"
-                            th:value="${instructor.getInstructorId()}"></option>
-                    </select>
+                    <label>
+                        <select sec:authorize="hasAuthority('Admin')" th:field="${course.instructor}" name="instructor" class="form-select">
+                            <option th:each="instructor:${listInstructors}"
+                                th:text="${instructor.getFirstName()} + ' ' + ${instructor.getLastName()}"
+                                th:value="${instructor.getInstructorId()}"></option>
+                        </select>
+                    </label>
+                    <label>
+                        <select sec:authorize="!hasAuthority('Admin') && hasAuthority('Instructor')" th:field="${course.instructor}" name="instructor" class="form-select">
+                            <option selected
+                                th:text="${currentInstructor.getFirstName()} + ' ' + ${currentInstructor.getLastName()}"
+                                th:value="${currentInstructor.getInstructorId()}"></option>
+                        </select>
+                    </label>
                 </div>
                 <div class="mb-3 mt-3" th:each="student:${course.getStudents()}">
                     <input hidden name="students" class="form-control"

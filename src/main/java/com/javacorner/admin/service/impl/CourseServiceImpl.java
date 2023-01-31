@@ -19,9 +19,9 @@ import com.javacorner.admin.service.CourseService;
 @Transactional
 public class CourseServiceImpl implements CourseService {
 
-    private CourseDao courseDao;
-    private InstructorDao instructorDao;
-    private StudentDao studentDao;
+    private final CourseDao courseDao;
+    private final InstructorDao instructorDao;
+    private final StudentDao studentDao;
 
     public CourseServiceImpl(CourseDao courseDao, InstructorDao instructorDao, StudentDao studentDao){
         this.courseDao = courseDao;
@@ -44,7 +44,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course createOrUpdateCourse(Course course){
-        // courseDao.delete(course);
         return courseDao.save(course);
     }
 
@@ -62,8 +61,6 @@ public class CourseServiceImpl implements CourseService {
         .orElseThrow(() -> new EntityNotFoundException("Course with ID " + courseId + " Not Found"));
 
         course.assignStudentToCourse(student);
-        // courseDao.save(course);
-        // studentDao.save(student);
     }
 
     @Override
@@ -80,5 +77,7 @@ public class CourseServiceImpl implements CourseService {
     public void removeCourse(Long courseId){
         courseDao.deleteById(courseId);
     }
+
+
 
 }

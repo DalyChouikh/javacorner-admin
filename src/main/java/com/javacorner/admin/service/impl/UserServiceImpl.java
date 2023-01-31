@@ -1,5 +1,6 @@
 package com.javacorner.admin.service.impl;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +16,10 @@ import com.javacorner.admin.service.UserService;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private UserDao userDao;
-    private RoleDao roleDao;
+    private final UserDao userDao;
+    private final RoleDao roleDao;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     public UserServiceImpl(UserDao userDao, RoleDao roleDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
         this.roleDao = roleDao;
@@ -43,6 +44,12 @@ public class UserServiceImpl implements UserService {
         User user = loadUserByEmail(email);
         Role role = roleDao.findByName(roleName);
         user.assignRoleToUser(role);
+    }
+
+    @Override
+    public boolean doesCurrentUserHaveRole(String roleName){
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(roleName));
     }
     
 }
